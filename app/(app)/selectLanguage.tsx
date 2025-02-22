@@ -17,17 +17,23 @@ const languages = ["Turkish", "English", "French"];
 
 interface LanguageItemProps {
   title?: string;
+  selected: boolean;
   onPress?: () => void;
 }
 
-const LanguageItem = ({ title, onPress }: LanguageItemProps) => (
+const LanguageItem = ({ title, selected, onPress }: LanguageItemProps) => (
   <TouchableOpacity
     onPress={onPress}
-    className=" flex flex-row w-full px-8 py-4 items-center justify-between  bg-neutral-200 rounded-md"
-    // change the bg color to #404040 and text collor to white when language is selected
+    className={`flex flex-row w-full px-8 py-4 items-center justify-between rounded-md ${
+      selected ? "bg-[#404040]" : "bg-neutral-200"
+    }`}
   >
     <View className="flex flex-row items-center gap-3 w-full justify-center">
-      <Text className={`text-lg font-rubik-medium text-neutral-700`}>
+      <Text
+        className={`text-lg font-rubik-medium ${
+          selected ? "text-white" : "text-neutral-700"
+        }`}
+      >
         {title}
       </Text>
     </View>
@@ -35,9 +41,9 @@ const LanguageItem = ({ title, onPress }: LanguageItemProps) => (
 );
 
 export default function SelectLanguage() {
-  const [redirect, setRedirect] = useState(false);
-
-  if (redirect) return <Redirect href="/home" />;
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(
+    "English"
+  );
 
   return (
     <View
@@ -50,21 +56,25 @@ export default function SelectLanguage() {
         </View>
       </View>
       <View>
-        <Text className="font-rubik font-semibold text-[24px] text-center">
+        <Text className="font-rubik font-semibold text-[22px] text-center">
           Please select language
         </Text>
       </View>
 
       <View className="flex flex-col mt-10 gap-4">
         {languages.map((item, i) => (
-          <LanguageItem title={item} key={i} />
+          <LanguageItem
+            title={item}
+            key={i}
+            selected={selectedLanguage === item}
+            onPress={() => setSelectedLanguage(item)}
+          />
         ))}
       </View>
 
       <TouchableOpacity
-        className="bg-neutral-800 flex items-center justify-center rounded-2xl absolute right-10 bottom-20 "
+        className="bg-neutral-700 flex items-center justify-center rounded-2xl absolute right-10 bottom-20"
         onPress={() => router.push("/home")}
-        // onPress={() => setRedirect(true)}
       >
         <View className="bg-neutral-700 text-white rounded-xl size-12 flex items-center justify-center">
           <Right />

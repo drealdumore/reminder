@@ -10,11 +10,11 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { ArrowLeftIcon, CalendarDays, ClockIcon } from "../../assets/icons";
-import { router } from "expo-router";
-import { useState } from "react";
-import ColorPicker from "../../components/colorPicker";
+import { ArrowLeftIcon, CalendarDays, ClockIcon } from "../../../assets/icons";
+import { router, useLocalSearchParams } from "expo-router";
+import { useState, useEffect } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import ColorPicker from "../../../components/colorPicker";
 
 const { width, height } = Dimensions.get("window");
 
@@ -28,18 +28,35 @@ interface ReminderForm {
   color: string | null;
 }
 
-export default function CreateReminder() {
+export default function EditReminder() {
+  // Get the id from route parameters
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  // In a real app, fetch the reminder based on id.
+  // For demo, we simulate with dummy data:
+  const dummyReminder: ReminderForm = {
+    name: "Meeting with Team",
+    description: "Discuss project updates",
+    day: new Date(),
+    dayString: new Date().toDateString(),
+    hour: new Date(),
+    hourString: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    color: "purple",
+  };
+
   const [showPicker, setShowPicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [formData, setFormData] = useState<ReminderForm>({
-    name: "",
-    description: "",
-    day: new Date(),
-    dayString: "",
-    hour: new Date(),
-    hourString: "",
-    color: "purple",
-  });
+  const [formData, setFormData] = useState<ReminderForm>(dummyReminder);
+
+  // If you were fetching data from an API or state store, you might load it here:
+  useEffect(() => {
+    // Example: fetchReminder(id) and then setFormData(data)
+    // For demo, we assume dummyReminder is loaded.
+    console.log("Editing reminder with id:", id);
+  }, [id]);
 
   const updateField = (field: keyof ReminderForm, value: any) => {
     setFormData((prev) => ({
@@ -90,19 +107,16 @@ export default function CreateReminder() {
   };
 
   const resetForm = () => {
-    setFormData({
-      name: "",
-      description: "",
-      day: new Date(),
-      dayString: "",
-      hour: new Date(),
-      hourString: "",
-      color: "purple",
-    });
+    // Reset back to the loaded reminder data (or empty if you prefer)
+    setFormData(dummyReminder);
   };
 
-  const onPress = () => {
-    console.log("Form Data:", formData);
+  const goBack = () => router.back();
+
+  const onPressUpdate = () => {
+    // Handle updating the reminder (save to state, call API, etc.)
+    console.log("Updated Form Data:", formData);
+    // Then navigate back or show a success message.
   };
 
   return (
@@ -114,14 +128,14 @@ export default function CreateReminder() {
             style={{ marginTop: 12 }}
           >
             <View className="flex gap-4 items-center flex-row w-full">
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={goBack}>
                 <ArrowLeftIcon className="size-14" style={{ padding: 14 }} />
               </TouchableOpacity>
               <Text
                 className="font-rubik-medium flex-1 text-[22px]"
                 style={{ textAlign: "center" }}
               >
-                Create Reminder
+                Edit Reminder
               </Text>
             </View>
           </View>
@@ -179,7 +193,7 @@ export default function CreateReminder() {
             style={{ justifyContent: "flex-end" }}
           >
             <TouchableOpacity
-              onPress={resetForm}
+              onPress={goBack}
               className="flex px-8 py-4 items-center bg-neutral-200 rounded-2xl"
             >
               <Text className={`text-lg font-rubik-medium text-neutral-700`}>
@@ -188,11 +202,11 @@ export default function CreateReminder() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={onPress}
+              onPress={onPressUpdate}
               className="flex px-8 py-4 items-center rounded-2xl bg-neutral-700"
             >
               <Text className={`text-lg font-rubik-medium text-white`}>
-                Create
+                Update
               </Text>
             </TouchableOpacity>
           </View>
@@ -210,6 +224,14 @@ const InputField = ({
   multiline = false,
   style = {},
   maxLength,
+}: {
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder: string;
+  multiline?: boolean;
+  style?: any;
+  maxLength?: number;
 }) => (
   <View className="flex flex-col justify-center gap-3">
     <Text className="font-rubik">{label}</Text>
@@ -237,6 +259,14 @@ const DateTimeField = ({
   onChange,
   confirmIOS,
   mode,
+}: {
+  label: string;
+  value: string;
+  showPicker: boolean;
+  togglePicker: () => void;
+  onChange: (event: any, selectedDate: Date | undefined) => void;
+  confirmIOS: () => void;
+  mode: "date" | "time";
 }) => (
   <View className="flex flex-col justify-center gap-3">
     <Text className="font-rubik">{label}</Text>
@@ -287,6 +317,7 @@ const DateTimeField = ({
           </Pressable>
         )}
       </View>
+
       <TouchableOpacity>
         {mode === "date" ? (
           <CalendarDays style={{ padding: 12 }} />

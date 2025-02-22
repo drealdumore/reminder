@@ -81,7 +81,7 @@ export default function OnboardingScreens() {
           </Text>
         </View>
         <TouchableOpacity
-          className="bg-neutral-800 flex items-center justify-center rounded-2xl absolute right-10 bottom-20 "
+          className="bg-neutral-700 flex items-center justify-center rounded-2xl absolute right-10 bottom-20 "
           onPress={scrollTo}
         >
           <View className="bg-neutral-700 text-white rounded-xl size-12 flex items-center justify-center">
@@ -139,5 +139,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
-  
 });

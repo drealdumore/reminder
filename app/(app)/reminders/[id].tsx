@@ -12,12 +12,30 @@ const { width, height } = Dimensions.get("window");
 import { router, useLocalSearchParams } from "expo-router";
 
 import images from "@/constants/images";
-import { ArrowLeftIcon } from "../../../assets/icons";
+import { ArrowLeftIcon, ReminderIcon } from "../../../assets/icons";
+import { reminderData } from "@/constants/data";
 
 export default function ReminderDetail() {
   const { id } = useLocalSearchParams<{ id?: string }>();
 
-  const onPress = () => console.log("on press ✅✅");
+  const reminder = reminderData.find(
+    (item) => item.id === parseInt(id || "", 10)
+  );
+
+  if (!reminder) {
+    return (
+      <View
+        style={styles.view}
+        className="w-full flex items-center justify-center"
+      >
+        <Text className="font-rubik-medium text-xl text-neutral-800">
+          Reminder not found
+        </Text>
+      </View>
+    );
+  }
+
+  const onPress = () => router.push(`/edit/${reminder.id}`);
 
   return (
     <View>
@@ -36,7 +54,7 @@ export default function ReminderDetail() {
               </TouchableOpacity>
 
               <Text
-                className="font-rubik-medium flex-1 text-[24px]"
+                className="font-rubik-medium flex-1 text-[22px]"
                 style={{ textAlign: "center" }}
               >
                 Reminder Details
@@ -49,10 +67,13 @@ export default function ReminderDetail() {
             className="flex flex-col justify-center gap-8"
           >
             <View className="flex flex-row justify-center mt-5">
-              <View className="flex flex-col items-center relative mt-5">
-                <Image
-                  source={images.barChart}
+              <View
+                className="flex flex-col items-center relative mt-5 p-8 rounded-full"
+                style={{ backgroundColor: "#f1f1f1" }}
+              >
+                <ReminderIcon
                   className="size-44 rounded-full mb-8"
+                  style={{ padding: 35 }}
                 />
               </View>
             </View>
@@ -68,14 +89,14 @@ export default function ReminderDetail() {
                   Reminder Name
                 </Text>
                 <Text className="font-rubik-medium text-xl text-neutral-800">
-                  Send the project
+                  {reminder.title}
                 </Text>
               </View>
 
               <View className="flex flex-col gap-2 p-4">
                 <Text className="font-rubik text-neutral-600">Description</Text>
                 <Text className="font-rubik-medium text-xl text-neutral-800">
-                  Send the project ASAP...
+                  {reminder.description || "No description available"}
                 </Text>
               </View>
 
@@ -83,10 +104,10 @@ export default function ReminderDetail() {
                 <Text className="font-rubik text-neutral-600">Day & Hour</Text>
                 <View className="flex flex-row gap-4 items-center">
                   <Text className="font-rubik-medium text-xl text-neutral-800">
-                    12 February 2025
+                    {reminder.date}
                   </Text>
                   <Text className="font-rubik-medium text-xl text-neutral-800">
-                    10:00AM
+                    {reminder.time}
                   </Text>
                 </View>
               </View>
@@ -108,7 +129,7 @@ export default function ReminderDetail() {
 
             <TouchableOpacity
               onPress={onPress}
-              className="flex px-8 py-4 items-center  rounded-2xl bg-neutral-800"
+              className="flex px-8 py-4 items-center  rounded-2xl bg-neutral-700"
             >
               <Text className={`text-lg font-rubik-medium text-white`}>
                 Edit

@@ -1,53 +1,88 @@
-export const reminderData = [
+export interface Reminder {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  description: string;
+}
+
+export const reminderData: Reminder[] = [
   {
-    title: "Download gear & clock icon",
-    date: "12.02.2025",
-    time: "10:00 AM",
-  },
-  {
-    title: "Find out how to change RN input to date and time kinda input",
-    date: "14.02.2025",
-    time: "06:00 PM",
-  },
-  {
-    title: "how to make text break when wider than width",
-    date: "25.02.2025",
-    time: "09:00 AM",
-  },
-  {
-    title: "How to make this reminder scrollbar to scroll",
-    date: "25.02.2025",
-    time: "09:00 AM",
-  },
-  {
-    title: "Buy food",
-    date: "27.02.2025",
-    time: "10:00 AM",
-  },
-  {
+    id: 1,
     title: "Saint's Birthday",
-    date: "23.02.2025",
-    time: "08:00 AM",
+    date: "Sun Feb 23 2025",
+    time: "08:00AM",
+    description: "Celebrate Saint's birthday with family and friends.",
   },
   {
-    title: "Happiness's Birthday",
-    date: "21.04.2025",
-    time: "10:00 AM",
+    id: 2,
+    title: "Buy groceries",
+    date: "Wed Nov 15 2023",
+    time: "09:00AM",
+    description: "Buy groceries for the week from the local supermarket.",
   },
   {
-    title: "Happiness's Birthday",
-    date: "21.04.2025",
-    time: "10:00 AM",
+    id: 3,
+    title: "Doctor's appointment",
+    date: "Thu Nov 16 2023",
+    time: "11:00AM",
+    description: "Visit Dr. Smith for a regular check-up.",
   },
   {
-    title: "Happiness's Birthday",
-    date: "21.04.2025",
-    time: "10:00 AM",
+    id: 4,
+    title: "Team meeting",
+    date: "Fri Nov 17 2023",
+    time: "02:00PM",
+    description: "Monthly team meeting to discuss project progress.",
   },
   {
-    title: "Happiness's Birthday",
-    date: "21.04.2025",
-    time: "10:00 AM",
+    id: 5,
+    title: "Dinner with friends",
+    date: "Sat Nov 18 2023",
+    time: "07:00PM",
+    description: "Dinner at the new Italian restaurant with friends.",
+  },
+  {
+    id: 6,
+    title: "Yoga class",
+    date: "Sun Nov 19 2023",
+    time: "06:00AM",
+    description: "Morning yoga class at the community center.",
+  },
+  {
+    id: 7,
+    title: "Project deadline",
+    date: "Mon Nov 20 2023",
+    time: "05:00PM",
+    description: "Submit the final project report to the client.",
+  },
+  {
+    id: 8,
+    title: "Anniversary celebration",
+    date: "Tue Nov 21 2023",
+    time: "08:00PM",
+    description: "Celebrate wedding anniversary with a special dinner.",
+  },
+  {
+    id: 9,
+    title: "Parent-teacher meeting",
+    date: "Wed Nov 22 2023",
+    time: "10:00AM",
+    description: "Discuss child's progress with the teacher.",
+  },
+  {
+    id: 10,
+    title: "Flight to New York ✈️✈️",
+    date: "Thu Nov 23 2023",
+    time: "04:00PM",
+    description: "Flight to New York for a business trip.",
+  },
+  {
+    id: 11,
+    title: "Gym workout 💪💪💪",
+    date: "Fri Nov 24 2023",
+    time: "07:00AM",
+    description: "Morning workout session at the gym.",
   },
 ];
 

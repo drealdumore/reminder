@@ -24,7 +24,7 @@ export default function ColorPicker({
               style={{
                 backgroundColor: color.value,
                 borderWidth: selectedColor === color.id ? 2 : 0,
-                borderColor: "#6366f1",
+                borderColor: "#404040",
                 padding: 2,
               }}
             />

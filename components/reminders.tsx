@@ -1,93 +1,155 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import React from "react";
 
-import { CalendarDays, ClockIcon, Send, Threedots } from "../assets/icons";
+import {
+  CalendarDays,
+  ClockIcon,
+  Send,
+  Threedots,
+  NotificationIcon,
+} from "../assets/icons";
 import { router } from "expo-router";
-import { reminderData } from "../constants/data";
+import { Reminder } from "../constants/data";
 
-const Reminders = () => {
+const Reminders = ({ reminderData }: { reminderData: Reminder[] }) => {
   const handlePress = (id: string | number) => {
-    console.log("routing...");
-    // router.push(`/properties/${id}`);
     router.push(`/reminders/${id}`);
   };
   return (
     <ScrollView
-      contentContainerClassName="min-h-screen"
       showsVerticalScrollIndicator={false}
-      // contentContainerStyle={{ paddingBottom: 32, height: "auto" }}
+      contentContainerStyle={styles.scrollContainer}
+      contentContainerClassName="flex-1"
     >
-      <View className="flex flex-row justify-center mt-5">
-        <View className="flex flex-col items-center relative mt-5 gap-4">
-          {reminderData.map((reminder, i) => (
-            <ReminderItem
-              key={i}
-              title={reminder.title}
-              date={reminder.date}
-              time={reminder.time}
-              onPress={() => handlePress(i)}
-            />
-          ))}
-        </View>
+      <View style={styles.container}>
+        {reminderData.map((reminder, i) => (
+          <ReminderItem
+            key={i}
+            title={reminder.title}
+            date={reminder.date}
+            time={reminder.time}
+            onPress={() => handlePress(i + 1)}
+          />
+        ))}
       </View>
     </ScrollView>
   );
 };
 
-export default Reminders;
-
 const ReminderItem = ({
   title,
   date,
   time,
-  bg,
   onPress,
 }: {
   title?: string;
   date?: string;
   time?: string;
-  bg?: string;
   onPress?: () => void;
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`flex flex-row w-full items-start  bg-neutral-200 rounded-2xl`}
-    style={{ padding: 12 }}
+    style={[styles.reminderItem, { backgroundColor: "#f1f1f1" }]}
   >
-    <View className="flex flex-row items-start gap-3 w-full justify-between">
-      <View className="flex gap-4 flex-row">
-        <View
-          className="rounded-full bg-white"
-          style={{
-            padding: 15,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Send style={{ padding: 12 }} />
+    <View style={styles.reminderContent}>
+      <View style={styles.leftContent}>
+        <View style={styles.iconContainer}>
+          <NotificationIcon style={styles.sendIcon} fill={"#f1f1f1"} />
         </View>
-
-        <View className="flex justify-center flex-col">
-          <Text className={`text-lg font-rubik-medium text-neutral-700`}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title} numberOfLines={0}>
             {title}
           </Text>
-          <View className="flex flex-row gap-3 mt-2">
-            <View className="flex flex-row gap-2 items-center">
+          <View style={styles.infoRow}>
+            <View style={styles.infoItem}>
               <CalendarDays />
-              <Text className="text-sm">{date}</Text>
+              <Text style={styles.infoText}>{date}</Text>
             </View>
-            <View className="flex flex-row gap-2  items-center">
+            <View style={styles.infoItem}>
               <ClockIcon />
-              <Text className="text-sm">{time}</Text>
+              <Text style={styles.infoText}>{time}</Text>
             </View>
           </View>
         </View>
       </View>
-
-      <View style={{ paddingRight: 4 }}>
+      <View style={styles.moreIconContainer}>
         <Threedots />
       </View>
     </View>
   </TouchableOpacity>
 );
+
+export default Reminders;
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingBottom: 32,
+    flexGrow: 1,
+  },
+  container: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: "center",
+    width: "100%",
+  },
+  reminderItem: {
+    width: "100%",
+    borderRadius: 12,
+    padding: 12,
+    marginVertical: 8,
+  },
+  reminderContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  leftContent: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    flex: 1,
+  },
+  iconContainer: {
+    backgroundColor: "white",
+    borderRadius: 999,
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sendIcon: {
+    padding: 12,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 17,
+    fontFamily: "Rubik-Medium",
+    color: "#4a4a4a",
+    flexWrap: "wrap",
+  },
+  infoRow: {
+    flexDirection: "row",
+    marginTop: 8,
+    gap: 12,
+  },
+  infoItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  infoText: {
+    fontSize: 14,
+    color: "#4a4a4a",
+  },
+  moreIconContainer: {
+    paddingRight: 4,
+  },
+});

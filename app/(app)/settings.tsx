@@ -1,4 +1,3 @@
-
 import {
   StyleSheet,
   View,
@@ -11,147 +10,97 @@ import {
 } from "react-native";
 import { ArrowLeftIcon } from "../../assets/icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const { width, height } = Dimensions.get("window");
 
-export default function Settings() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+interface SettingsItemProps {
+  label: string;
+  rightText?: string;
+  isSwitch?: boolean;
+  initialSwitchValue?: boolean;
+  onSwitchChange?: (value: boolean) => void;
+  onPress?: () => void;
+}
+
+const SettingsItem = ({
+  label,
+  rightText,
+  isSwitch = false,
+  initialSwitchValue = false,
+  onSwitchChange,
+  onPress,
+}: SettingsItemProps) => {
+  const [switchValue, setSwitchValue] = useState(initialSwitchValue);
+
+  const toggleSwitch = () => {
+    setSwitchValue((prev) => {
+      const newValue = !prev;
+      if (onSwitchChange) {
+        onSwitchChange(newValue);
+      }
+      return newValue;
+    });
+  };
 
   return (
-    <SafeAreaView className="bg-white h-full">
-      <ScrollView contentContainerClassName="h-full">
-        <View style={styles.view} className="w-full">
-          <View
-            className="flex justify-between flex-row items-center mt-8"
-            style={{ marginTop: 12 }}
-          >
-            <View className="flex gap-4 items-center flex-row w-full">
-              <TouchableOpacity onPress={() => router.back()}>
-                <ArrowLeftIcon className="size-14" style={{ padding: 14 }} />
-              </TouchableOpacity>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={onPress ? 0.7 : 1}
+      style={styles.itemContainer}
+    >
+      <View style={styles.itemContent}>
+        <Text style={styles.label}>{label}</Text>
+        {isSwitch ? (
+          <Switch
+            trackColor={{ false: "#767577", true: "#000" }}
+            thumbColor={switchValue ? "#fff" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={switchValue}
+          />
+        ) : (
+          <Text style={styles.rightText}>{rightText}</Text>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-              <Text
-                className="font-rubik-medium flex-1 text-[24px]"
-                style={{ textAlign: "center" }}
-              >
-                Settings
-              </Text>
-            </View>
+export default function Settings() {
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.view}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()}>
+              <ArrowLeftIcon style={styles.backIcon} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Settings</Text>
           </View>
 
-          <View
-            style={{ marginTop: 20 }}
-            className="flex flex-col justify-center gap-8"
-          >
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950   ">
-                    Language
-                  </Text>
-                  <Text className="text-sm font-rubik text-neutral-950   ">
-                    English
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950">
-                    Reminder Notification Sound
-                  </Text>
-                  <Text className="text-sm font-rubik text-neutral-950   ">
-                    Default
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950">
-                    Show Description in Notifications
-                  </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950">
-                    Show Past Reminders
-                  </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950">
-                    Sort By Time
-                  </Text>
-                  <Switch
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
-                  />
-                </View>
-              </View>
-            </View>
-
-            <View className="flex flex-col justify-center gap-3">
-              <View
-                className="flex flex-row items-center justify-between w-full px-4 rounded-2xl bg-neutral-200 border border-primary-100 py-4"
-                style={{ height: 60 }}
-              >
-                <View className="flex-1 flex flex-row items-center justify-between z-50">
-                  <Text className="text-sm font-rubik text-neutral-950   ">
-                    Version
-                  </Text>
-                  <Text className="text-sm font-rubik text-neutral-950   ">
-                    1.3.1
-                  </Text>
-                </View>
-              </View>
-            </View>
+          <View style={styles.itemsContainer}>
+            <SettingsItem label="Language" rightText="English" />
+            <SettingsItem
+              label="Reminder Notification Sound"
+              rightText="Default"
+            />
+            <SettingsItem
+              label="Show Description in Notifications"
+              isSwitch
+              initialSwitchValue={false}
+            />
+            <SettingsItem
+              label="Show Past Reminders"
+              isSwitch
+              initialSwitchValue={false}
+            />
+            <SettingsItem
+              label="Sort By Time"
+              isSwitch
+              initialSwitchValue={false}
+            />
+            <SettingsItem label="Version" rightText="1.3.1" />
           </View>
         </View>
       </ScrollView>
@@ -160,9 +109,62 @@ export default function Settings() {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
   view: {
     width,
-    height,
+    flex: 1,
     padding: 20,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 12,
+    marginBottom: 20,
+  },
+  backIcon: {
+    padding: 14,
+  },
+  headerTitle: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: 22,
+    fontFamily: "Rubik-Medium",
+  },
+  itemsContainer: {
+    marginTop: 20,
+  },
+  itemContainer: {
+    height: 60,
+    width: "100%",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 12,
+    backgroundColor: "#E5E7EB",
+    borderWidth: 1,
+    borderColor: "#0061FF0A",
+    marginBottom: 16,
+    justifyContent: "center",
+  },
+  itemContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  label: {
+    fontSize: 14,
+    fontFamily: "Rubik",
+    color: "#1F2937",
+    fontWeight: "900",
+  },
+  rightText: {
+    fontSize: 14,
+    fontFamily: "Rubik",
+    color: "#1F2937",
   },
 });
