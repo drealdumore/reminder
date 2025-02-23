@@ -14,15 +14,25 @@ import { useLocalSearchParams, router, Link, Redirect } from "expo-router";
 import { useState, useMemo } from "react";
 import Reminders from "../../components/reminders";
 import NoReminder from "../../components/noReminder";
-import images from "../../constants/images"; // Import images
+import images from "../../constants/images";
 import { reminderData } from "../../constants/data";
+import { format, isValid, parse } from "date-fns";
 
 const { width } = Dimensions.get("window");
 
 export default function Home() {
   const params = useLocalSearchParams<{ query?: string }>();
   const [search, setSearch] = useState(params.query || "");
-  const [filter, setFilter] = useState("all"); 
+  const [filter, setFilter] = useState("all");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
 
   const debouncedSearch = (text: string) => {
     router.setParams({ query: text });
@@ -38,13 +48,29 @@ export default function Home() {
   };
 
   const filteredReminders = useMemo(() => {
+    const today = format(new Date(), "EEE MMM dd yyyy");
+
+    // First, filter reminders based on the search term
+    const searchFilteredReminders = reminderData.filter((reminder) =>
+      reminder.title.toLowerCase().includes(search.toLowerCase())
+    );
+
+    // If there is a search term, return the search results
+    if (search) {
+      return searchFilteredReminders;
+    }
+
+    // Otherwise, apply the date-based filter to all reminders
     return reminderData.filter((reminder) => {
-      const matchesSearch = reminder.title
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesFilter =
-        filter === "all" || (filter === "today" && reminder.isToday); // FIX THIS ERROR
-      return matchesSearch && matchesFilter;
+      const reminderDateTime = new Date(`${reminder.date} ${reminder.time}`);
+      const isValidDate = isValid(reminderDateTime);
+      return (
+        filter === "all" ||
+        (filter === "today" &&
+          isValidDate &&
+          format(reminderDateTime, "EEE MMM dd yyyy") === today) ||
+        (filter === "passed" && isValidDate && reminderDateTime < new Date())
+      );
     });
   }, [search, filter]);
 
@@ -75,7 +101,13 @@ export default function Home() {
             </TouchableOpacity>
           </View>
 
-          <View className="flex flex-row items-center justify-between w-full px-4 rounded-lg bg-accent-100 border border-primary-100 mt-5 py-2">
+          <View
+            className={`flex flex-row rounded-2xl items-center border justify-between w-full px-4 mt-5 py-2 ${
+              isFocused
+                ? "bg-neutral-200 border-neutral-400"
+                : "bg-[#f1f1f1] border-primary-100"
+            }`}
+          >
             <View className="flex-1 flex flex-row items-center justify-start z-50">
               <TextInput
                 value={search}
@@ -83,6 +115,8 @@ export default function Home() {
                 placeholder="Search"
                 maxLength={25}
                 className="text-sm font-rubik text-neutral-950 ml-2 flex-1"
+                onFocus={handleFocus}
+                onBlur={handleBlur}
               />
             </View>
 
@@ -91,7 +125,7 @@ export default function Home() {
             </TouchableOpacity>
           </View>
 
-          <View className="flex w-full mt-10 flex-row items-center gap-4">
+          <View className="flex w-full mt-10 flex-row items-center gap-2">
             <TouchableOpacity
               onPress={() => handleFilterChange("all")}
               className={`flex px-8 py-3 items-center rounded-2xl ${
@@ -121,6 +155,21 @@ export default function Home() {
                 Today
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => handleFilterChange("passed")}
+              className={`flex px-8 py-3 items-center rounded-2xl ${
+                filter === "passed" ? "bg-neutral-700" : "bg-neutral-200"
+              }`}
+            >
+              <Text
+                className={`text-lg font-rubik-medium ${
+                  filter === "passed" ? "text-white" : "text-neutral-700"
+                }`}
+              >
+                Passed
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {hasReminders ? (
@@ -129,9 +178,13 @@ export default function Home() {
             ) : (
               <NoReminder
                 message={
-                  filter === "today"
+                  search
+                    ? "No reminders found for your search"
+                    : filter === "today"
                     ? "No reminders for today"
-                    : "No reminders found for your search"
+                    : filter === "passed"
+                    ? "No passed reminders found"
+                    : "No reminders found"
                 }
                 imageSource={images.noResult}
               />
@@ -142,7 +195,6 @@ export default function Home() {
               imageSource={images.noResult}
             />
           )}
-
         </View>
       </ScrollView>
     </SafeAreaView>

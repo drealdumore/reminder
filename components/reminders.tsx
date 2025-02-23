@@ -10,11 +10,12 @@ import React from "react";
 import {
   CalendarDays,
   ClockIcon,
-  Send,
   Threedots,
   NotificationIcon,
 } from "../assets/icons";
+
 import { router } from "expo-router";
+
 import { Reminder } from "../constants/data";
 
 const Reminders = ({ reminderData }: { reminderData: Reminder[] }) => {

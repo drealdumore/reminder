@@ -1,4 +1,4 @@
-import React, { SVGProps } from "react";
+import React from "react";
 import Svg, { Circle, Path, SvgProps } from "react-native-svg";
 
 export const Right = (props: SvgProps) => (

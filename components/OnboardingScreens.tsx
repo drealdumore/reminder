@@ -3,37 +3,34 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   Dimensions,
   TouchableOpacity,
   FlatList,
   SafeAreaView,
 } from "react-native";
 import { Right } from "../assets/icons";
-import assets from "../constants/assets";
 import { Redirect } from "expo-router";
 
 const { width, height } = Dimensions.get("window");
 
 const slides: Array<{
   id: string;
-  image: any;
+  // image: any;
   title: string;
 }> = [
   {
     id: "1",
-    image: assets.gameNight,
-    // image: require("../assets/svg/Reminders.svg"),
+    // image: assets.gameNight,
     title: "Use your time more efficiently with Reminder",
   },
   {
     id: "2",
-    image: assets.timeManagement,
+    // image: assets.timeManagement,
     title: "Don't miss important appointments, meetings and events",
   },
   {
     id: "3",
-    image: assets.noTime,
+    // image: assets.noTime,
     title: "Organize your life with Reminder",
   },
 ];
