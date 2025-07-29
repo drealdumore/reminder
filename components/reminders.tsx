@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  FlatList,
 } from "react-native";
 import React from "react";
 
@@ -14,11 +15,16 @@ import {
   NotificationIcon,
 } from "../assets/icons";
 
+import Animated, { LinearTransition } from "react-native-reanimated"
+
+
 import { router } from "expo-router";
 
 import { Reminder } from "../constants/data";
 
 const Reminders = ({ reminderData }: { reminderData: Reminder[] }) => {
+
+
   const handlePress = (id: string | number) => {
     router.push(`/reminders/${id}`);
   };
@@ -27,18 +33,21 @@ const Reminders = ({ reminderData }: { reminderData: Reminder[] }) => {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.scrollContainer}
       contentContainerClassName="flex-1"
+      horizontal
     >
-      <View style={styles.container}>
+      <Animated.View style={styles.container} >
         {reminderData.map((reminder, i) => (
           <ReminderItem
-            key={i}
+            key={Math.random()}
             title={reminder.title}
             date={reminder.date}
             time={reminder.time}
             onPress={() => handlePress(i + 1)}
           />
         ))}
-      </View>
+      </Animated.View>
+
+      {/* <Animated.FlatList data={reminderData} renderItem={ReminderItem} keyExtractor={reminder => reminder.date} itemLayoutAnimation={LinearTransition} keyboardDismissMode="on-drag" /> */}
     </ScrollView>
   );
 };

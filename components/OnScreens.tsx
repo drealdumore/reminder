@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Right } from "../assets/icons";
 import { Redirect } from "expo-router";
+import Animated from "react-native-reanimated"
 
 const { width, height } = Dimensions.get("window");
 
@@ -91,7 +92,7 @@ export default function OnboardingScreens() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
+      <Animated.FlatList
         data={slides}
         renderItem={renderSlide}
         horizontal
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: "600", 
     color: "#1F1F1F",
     textAlign: "center",
     marginBottom: 10,

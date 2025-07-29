@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from 'expo-status-bar';
+
 
 import "./globals.css";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { ActivityIndicator } from "react-native";
 
 export default function RootLayout() {
@@ -37,5 +39,10 @@ export default function RootLayout() {
     );
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }} />;
+      <StatusBar style="auto" />
+    </SafeAreaProvider>
+  );
 }

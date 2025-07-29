@@ -16,17 +16,18 @@ export const reminderData: Reminder[] = [
   },
   {
     id: 2,
-    title: "Buy groceries",
+    title: "Install screen record Drivers",
     date: "Wed Nov 15 2025",
     time: "09:00AM",
-    description: "Buy groceries for the week from the local supermarket.",
+    description: "Install needed drivers for STONE",
   },
   {
     id: 3,
-    title: "Doctor's appointment",
+    title: "Create Hotel app",
     date: "Thu Nov 16 2025",
     time: "11:00AM",
-    description: "Visit Dr. Smith for a regular check-up.",
+    description:
+      "App that users can select and book hotels. will prolly get the data and images from whities hotel or if i get any good looking one. should be similar to the restate.",
   },
   {
     id: 4,
@@ -83,6 +84,27 @@ export const reminderData: Reminder[] = [
     date: "Fri Nov 24 2025",
     time: "07:00AM",
     description: "Morning workout session at the gym.",
+  },
+  {
+    id: 12,
+    title: "Buy groceries",
+    date: "Wed Nov 15 2025",
+    time: "09:00AM",
+    description: "Buy groceries for the week from the local supermarket.",
+  },
+  {
+    id: 13,
+    title: "Doctor's appointment",
+    date: "Thu Nov 16 2025",
+    time: "11:00AM",
+    description: "Visit Dr. Smith for a regular check-up.",
+  },
+  {
+    id: 14,
+    title: "Nath's Birthday",
+    date: "Tue Jan 14 2025",
+    time: "08:00AM",
+    description: "Celebrate Saint's birthday with family and friends.",
   },
 ];
 

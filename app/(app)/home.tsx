@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  RefreshControl,
 } from "react-native";
 import { Plus, SettingIcon, SearchIcon } from "../../assets/icons";
 import { useLocalSearchParams, router, Link, Redirect } from "expo-router";
@@ -25,6 +26,7 @@ export default function Home() {
   const [search, setSearch] = useState(params.query || "");
   const [filter, setFilter] = useState("all");
   const [isFocused, setIsFocused] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -76,9 +78,27 @@ export default function Home() {
 
   const hasReminders = reminderData.length > 0;
 
+  // THIS SHOULD REFRESH AND GET MORE REMINDERS IF MORE OR STH LIKE THAT
+  const onRefresh = () => {
+    setRefreshing(true);
+    filteredReminders;
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  };
+
   return (
     <SafeAreaView className="bg-white flex-1">
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={["#404040"]}
+          />
+        }
+      >
         <View style={styles.view}>
           <View className="flex justify-between flex-row items-center pt-8">
             <View className="flex gap-4 items-center flex-row justify-center">
